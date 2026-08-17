@@ -1,7 +1,9 @@
 import pandas as pd
 from pathlib import Path
+from datetime import datetime
 
 PASTA_DADOS = Path(__file__).resolve().parent.parent / "data"
+PASTA_EXPORTS = Path(__file__).resolve().parent.parent / "exports"
 EXTENSOES_SUPORTADAS = {".csv", ".xlsx"}
 CAMPOS_ESPERADOS = {
     "Carimbo de data/hora",
@@ -45,5 +47,15 @@ def identificaArquivo(caminho: str) -> str:
 def validaArquivo(df: pd.DataFrame) -> bool:
     return set(df.columns) == CAMPOS_ESPERADOS
 
-def exportaArquivo():
-    return
+def exportaArquivo(df: pd.DataFrame, nomeBase: str, formato: str) -> Path:
+    PASTA_EXPORTS.mkdir(exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    caminho = PASTA_EXPORTS / f"{nomeBase}_{timestamp}.{formato}"
+
+    if formato == "csv":
+        df.to_csv(caminho, index=False)
+    else:
+        df.to_excel(caminho, index=False)
+
+    return caminho
