@@ -3,6 +3,10 @@
 venv/
 env/
 
+# Dados (mantém a pasta, ignora o conteúdo)
+data/*
+!data/.gitkeep
+
 # Bytecode e cache do Python
 __pycache__/
 *.pyc
